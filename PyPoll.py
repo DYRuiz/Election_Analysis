@@ -36,7 +36,7 @@ with open(file_to_load) as election_data:
     file_reader=csv.reader(election_data)
     #Read the header row
     headers=next(file_reader)    
-    #Pring each row in the csv file
+    #Print each row in the csv file
     for row in file_reader:
         #Add to the total vote count
         total_votes+=1
@@ -50,38 +50,50 @@ with open(file_to_load) as election_data:
         #Add a vote to each candidate count
         candidate_votes[candidate_name]+=1
 
-#Determine percentage of votes for each candidate
-#Iterate through candidate list
-for candidate_name in candidate_votes:
-    #Retrieve vote count of candidate
-    votes=candidate_votes[candidate_name]
-    #Calculate percentage of votes
-    vote_percentage=float(votes)/float(total_votes)*100
-
-    #Print out each candidate's name, vote count and percentage of the vote
-    #Determine winning vote count and candidate
-    #Determine if the votes is greater than the winning count
-    if (votes>winning_count) and (vote_percentage>winning_percentage):
-        #True: Set winning count equal to voting count and winning percentage equal to vote percentage
-        winning_count=votes
-        winning_percentage=vote_percentage
-        #Set winning candidate equal to candidate's name
-        winning_candidate=candidate_name
-
-    #Print the each candidate's name, vote count and percentage of vote
-    print(f"{candidate_name}: {vote_percentage:.1f}% ({votes:,})\n")
-
-winning_candidate_summary=(
-    f"---------------------------\n"
-    f"Winner: {winning_candidate}\n"
-    f"Winning vote count: {winning_count:,}\n"
-    f"Winning Percentage: {winning_percentage:.1f}%\n"
-    f"---------------------------\n")
-print(winning_candidate_summary)
-
-#Use with statement to open file as a text file
-#with open(file_to_save,"w") as txt_file:
-    #Write test data to file
-    #txt_file.write("Counties in the Election\n---------\nArapahoe\nDenver\nJefferson")
-
-
+    #Save results to output text file
+    with open(file_to_save,"w") as txt_file:
+        #Print final vote count to terminal
+        election_results=(
+            f"\nElection Results\n"
+            f"--------------------------\n"
+            f"Total Votes: {total_votes:,}\n"
+            f"--------------------------\n")
+        print(election_results,end="")
+        
+        #Save final vote count to the text file
+        txt_file.write(election_results)
+        
+        #Determine percentage of votes for each candidate
+        #Iterate through candidate list
+        for candidate_name in candidate_votes:
+            #Retrieve vote count of candidate
+            votes=candidate_votes[candidate_name]
+            #Calculate percentage of votes
+            vote_percentage=float(votes)/float(total_votes)*100
+            
+            #Print the each candidate's name, vote count and percentage of vote
+            candidate_results=(f"{candidate_name}: {vote_percentage:.1f}% ({votes:,})\n")
+            print(candidate_results)
+            #Save candidate results to text file
+            txt_file.write(candidate_results)#Determine winning vote count and candidate
+            
+            #Determine if the votes is greater than the winning count
+            if (votes>winning_count) and (vote_percentage>winning_percentage):
+                #True: Set winning count equal to voting count and winning percentage equal to vote percentage
+                winning_count=votes
+                winning_percentage=vote_percentage
+                #Set winning candidate equal to candidate's name
+                winning_candidate=candidate_name   
+   
+        winning_candidate_summary=(
+            f"---------------------------\n"
+            f"Winner: {winning_candidate}\n"
+            f"Winning vote count: {winning_count:,}\n"
+            f"Winning Percentage: {winning_percentage:.1f}%\n"
+            f"---------------------------\n")
+        print(winning_candidate_summary)
+        #Save the winning candidate's summary to the text file
+        txt_file.write(winning_candidate_summary)
+        
+            
+        
